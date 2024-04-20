@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  test_keycloak:
+    build:
+      context: .
+      dockerfile: docker/keycloak/Dockerfile
+      args:
+        - KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:21.0.0
+        - MAVEN_IMAGE=maven:3.9.2-eclipse-temurin-17
+    container_name: test_keycloak
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+    command:
+      - "start-dev"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./docker/keycloak/config:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
